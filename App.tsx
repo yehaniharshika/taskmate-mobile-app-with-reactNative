@@ -1,20 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// App.tsx - Entry Point
+import { Slot } from "expo-router";
+import { Provider } from "react-redux";
+
+import { View, ActivityIndicator } from "react-native";
+import { useFonts } from "expo-font";
+import {store} from "./src/store/store";
+
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return (
+        <View>
+          <ActivityIndicator size="large" color="#3498db" />
+        </View>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <Provider store={store}>
+        <Slot />
+      </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
