@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 
     btnText: {
         color: "#fff",
-        fontSize: 15,
+        fontSize: 13,
         fontFamily: 'Montserrat_500Medium'
     },
 });

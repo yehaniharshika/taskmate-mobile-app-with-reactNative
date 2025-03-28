@@ -11,6 +11,7 @@ export default function Index() {
 
     const [fontsLoaded] = useFonts({
         'Lilita One': require('../../assets/fonts/LilitaOne-Regular.ttf'), // Replace with your font file path
+        'Boba Party': require('../../assets/fonts/Boba Party.ttf'), // Replace with your font file path
     });
 
 
