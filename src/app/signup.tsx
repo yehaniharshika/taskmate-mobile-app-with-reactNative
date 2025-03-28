@@ -4,24 +4,41 @@ import { useRouter } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../utils/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
-import {Card} from "react-native-paper";
-import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
-import {useFonts} from "expo-font";
+import { Card } from "react-native-paper";
+import AppLoading from 'expo-app-loading';
+import {
+    useFonts,
+    Montserrat_100Thin,
+    Montserrat_200ExtraLight,
+    Montserrat_300Light,
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+    Montserrat_600SemiBold,
+    Montserrat_700Bold,
+    Montserrat_800ExtraBold,
+    Montserrat_900Black,
+} from '@expo-google-fonts/montserrat';
 
 const Signup = () => {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
-
-    const [fontsLoaded] = useFonts({
+    let [fontsLoaded] = useFonts({
+        Montserrat_100Thin,
+        Montserrat_200ExtraLight,
+        Montserrat_300Light,
         Montserrat_400Regular,
         Montserrat_500Medium,
         Montserrat_600SemiBold,
+        Montserrat_700Bold,
+        Montserrat_800ExtraBold,
+        Montserrat_900Black,
     });
 
-    if (fontsLoaded) {
-        console.log("load font")
+    // Wait for fonts to load before rendering the UI
+    if (!fontsLoaded) {
+        return <AppLoading />;
     }
 
     const handleSignUp = async () => {
@@ -29,7 +46,6 @@ const Signup = () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Firestore Database එකට User data එකතු කරන්න
             await setDoc(doc(db, "users", user.uid), {
                 name: name,
                 email: email,
@@ -37,7 +53,7 @@ const Signup = () => {
             });
 
             Alert.alert("Success", "SignUp successful!");
-            console.log(name,email,password);
+            console.log(name, email, password);
             router.push("login");
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -54,42 +70,40 @@ const Signup = () => {
         }
     };
 
-
     return (
         <View style={styles.container}>
             <Card style={styles.card}>
-                <Text style={styles.title}>Sign Up</Text>
+                <Text style={[styles.title, { fontFamily: 'Montserrat_700Bold' }]}>Sign Up</Text>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]}
                     placeholder="Name"
                     value={name}
                     onChangeText={setName}
                 />
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]}
                     placeholder="Email"
                     keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
                 />
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]}
                     placeholder="Password"
                     secureTextEntry
                     value={password}
                     onChangeText={setPassword}
                 />
                 <TouchableOpacity style={styles.signupBtn} onPress={handleSignUp}>
-                    <Text style={styles.btnText}>Sign Up</Text>
+                    <Text style={[styles.btnText, { fontFamily: 'Montserrat_600SemiBold' }]}>Sign Up</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => router.push("login")}>
-                    <Text style={styles.loginText}>
-                        Already have an account? <Text style={styles.loginLink}>Log in</Text>
+                    <Text style={[styles.loginText, { fontFamily: 'Montserrat_500Medium' }]}>
+                        Already have an account? <Text style={[styles.loginLink,{ fontFamily: 'Montserrat_400Regular' }]}>Log in</Text>
                     </Text>
                 </TouchableOpacity>
             </Card>
         </View>
-
     );
 };
 
@@ -112,7 +126,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 5,
-        borderWidth:3,
+        borderWidth: 3,
         borderColor: "#6F1E51"
     },
     title: {
@@ -120,6 +134,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 15,
         textAlign: "center",
+        fontFamily: 'Montserrat_700Bold'
     },
     input: {
         width: "100%",
@@ -128,7 +143,7 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
         borderRadius: 5,
         marginBottom: 10,
-        fontFamily: 'Montserrat_500Medium'
+        fontSize: 13
     },
     signupBtn: {
         backgroundColor: "#e84393",
@@ -138,16 +153,16 @@ const styles = StyleSheet.create({
     },
     btnText: {
         color: "#fff",
-        fontSize: 15,
-        fontFamily: 'Montserrat_500Medium'
+        fontSize: 12
     },
     loginText: {
         marginTop: 10,
         textAlign: "center",
-        fontFamily: 'Montserrat_500Medium'
     },
     loginLink: {
         color: "#007bff",
         fontWeight: "bold",
+        fontSize: 12,
+        fontFamily: 'Montserrat_700Bold',
     },
 });

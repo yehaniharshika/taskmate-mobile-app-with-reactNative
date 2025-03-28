@@ -18,6 +18,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
 import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
 import {useFonts} from "expo-font";
+import AppLoading from "expo-app-loading";
 
 
 interface Task {
@@ -41,8 +42,8 @@ const Home = () => {
         Montserrat_600SemiBold,
     });
 
-    if (fontsLoaded) {
-        console.log("load font")
+    if (!fontsLoaded) {
+        return <AppLoading />;
     }
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -169,10 +170,10 @@ const Home = () => {
                                         <Text style={styles.taskText}>{task.description} at {task.time}</Text>
                                         <View style={styles.taskActions}>
                                             <TouchableOpacity onPress={() => toggleTaskCompletion(task.id, task.completed)} style={styles.iconButton}>
-                                                <Ionicons name={task.completed ? 'checkbox' : 'square-outline'} size={24} color="black" />
+                                                <Ionicons name={task.completed ? 'checkbox' : 'square-outline'} size={26} color="#e84393" />
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() => deleteTask(task.id)} style={[styles.iconButton, styles.deleteButton]}>
-                                                <Ionicons name="trash" size={20} color="white" />
+                                                <Ionicons name="trash" size={15} color="white" />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -204,8 +205,8 @@ const Home = () => {
                         />
                         <Text style={{ marginBottom: 15 ,fontFamily: 'Montserrat_500Medium'}}>Selected Date: {selectedDate || "No Date Selected"}</Text>
                         <View style={{ flexDirection: "row", justifyContent: "center", width: "60%", alignItems: "center" }}>
-                            <TouchableOpacity onPress={handleAddTask} style={[styles.modalButton, { flex: 1, marginRight: 5 }]}>
-                                <Text style={styles.modalButtonText}>{isEditing ? "Update Task" : "Add Task"}</Text>
+                            <TouchableOpacity onPress={handleAddTask} style={[styles.modalButton, { flex: 1, marginRight: 5}]}>
+                                <Text style={styles.modalButtonText}>{isEditing ? "Update" : "Add"}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => setIsModalVisible(false)} style={[styles.modalButton, { flex: 1, backgroundColor: "gray", marginLeft: 5 }]}>
                                 <Text style={styles.modalButtonText}>Cancel</Text>
@@ -220,7 +221,7 @@ const Home = () => {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: "#f5f5f5", padding: 20 },
-    screenTitle: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20, color: "#333" ,fontFamily: "MontserratBold"},
+    screenTitle: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20, color: "#333" ,fontFamily: 'Montserrat_500Medium'},
     card: { backgroundColor: "#fff", borderRadius: 10, padding: 10, marginBottom: 20 },
     taskListContainer: { flex: 1 },
     taskCardContainer: { marginBottom: 16 },
@@ -232,12 +233,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
     },
-    taskDate: { fontSize: 16, fontWeight: "bold", marginBottom: 8 },
-    taskCard: { backgroundColor: "#ffbcf7", padding: 12, borderRadius: 8 },
+    taskDate: { fontSize: 14, fontWeight: "bold", marginBottom: 8,fontFamily: 'Montserrat_500Medium', },
+    taskCard: { backgroundColor: "#ffd7fa", padding: 12, borderRadius: 8 },
     taskItem: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderBottomWidth: 1, borderBottomColor: "#ddd", paddingBottom: 8, marginBottom: 12 },
-    taskText: { fontSize: 16, color: "#333" ,fontFamily: 'Montserrat_500Medium'},
+    taskText: { fontSize: 11, color: "#333" ,fontFamily: 'Montserrat_500Medium'},
     iconButton: { padding: 5, marginLeft: 10 },
-    deleteButton: { backgroundColor: "red", borderRadius: 5, padding: 5 },
+    deleteButton: { backgroundColor: "#e84393", borderRadius: 5, padding: 4 },
     addButton: { position: "absolute", bottom: 30, right: 30 },
     input: {
         width: "100%",

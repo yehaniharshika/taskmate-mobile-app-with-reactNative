@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
 import {useFonts} from "expo-font";
 import {useRouter} from "expo-router";
+import AppLoading from "expo-app-loading";
 
 
 export default function Profile() {
@@ -44,7 +45,7 @@ export default function Profile() {
     });
 
     if (!fontsLoaded) {
-        return <Text>Loading...</Text>; // You can show a loading screen here
+        return <AppLoading/>; // You can show a loading screen here
     }
 
 
@@ -343,12 +344,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat_500Medium'
     },
     userEmail: {
-        fontSize: 16,
+        fontSize: 12,
         color: '#666',
         fontFamily: 'Montserrat_500Medium'
     },
     userBio: {
-        fontSize: 14,
+        fontSize: 10,
         color: '#1B1464',
         marginTop: 4,
         fontFamily: 'Montserrat_500Medium'
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     settingTitle: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '500',
         color: '#333',
         fontFamily: 'Montserrat_500Medium'
@@ -514,7 +515,7 @@ const styles = StyleSheet.create({
     },
     accountActionText: {
         flex: 1,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '500',
         color: '#333',
         marginLeft: 12,
@@ -528,7 +529,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     signOutText: {
-        fontSize: 16,
+        fontSize: 14,
         color: '#f44336',
         marginLeft: 12,
         fontFamily: 'Montserrat_500Medium'
@@ -554,7 +555,7 @@ const styles = StyleSheet.create({
         paddingVertical: 4,
     },
     socialLinkText: {
-        fontSize: 14,
+        fontSize: 12,
         marginLeft: 12,
         color: '#555',
         fontFamily: 'Montserrat_500Medium'

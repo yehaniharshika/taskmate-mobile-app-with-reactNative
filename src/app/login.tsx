@@ -1,28 +1,44 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, Alert, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../utils/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import {Card} from "react-native-paper";
-import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
-import {useFonts} from "expo-font";
+import { Card } from "react-native-paper";
+import AppLoading from 'expo-app-loading';
+import {
+    useFonts,
+    Montserrat_100Thin,
+    Montserrat_200ExtraLight,
+    Montserrat_300Light,
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+    Montserrat_600SemiBold,
+    Montserrat_700Bold,
+    Montserrat_800ExtraBold,
+    Montserrat_900Black,
+} from '@expo-google-fonts/montserrat';
 
 export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [fontsLoaded] = useFonts({
+    let [fontsLoaded] = useFonts({
+        Montserrat_100Thin,
+        Montserrat_200ExtraLight,
+        Montserrat_300Light,
         Montserrat_400Regular,
         Montserrat_500Medium,
         Montserrat_600SemiBold,
+        Montserrat_700Bold,
+        Montserrat_800ExtraBold,
+        Montserrat_900Black,
     });
 
-    if (fontsLoaded) {
-        console.log("load font")
+    if (!fontsLoaded) {
+        return <AppLoading />;
     }
-
 
     const loginUser = async () => {
         try {
@@ -54,6 +70,7 @@ export default function Login() {
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
+                    placeholderTextColor="#999"
                 />
 
                 <TextInput
@@ -62,6 +79,7 @@ export default function Login() {
                     secureTextEntry={true}
                     value={password}
                     onChangeText={setPassword}
+                    placeholderTextColor="#999"
                 />
 
                 <TouchableOpacity style={styles.loginBtn} onPress={loginUser}>
@@ -74,10 +92,10 @@ export default function Login() {
                     </Text>
                 </TouchableOpacity>
             </Card>
-
         </View>
     );
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -86,7 +104,6 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: "#ffd9fa",
     },
-
     card: {
         padding: 20,
         width: "90%",
@@ -97,18 +114,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 5,
-        borderWidth:3,
+        borderWidth: 3,
         borderColor: "#6F1E51"
     },
-
     title: {
         fontSize: 24,
-        fontWeight: "bold",
+        fontFamily: 'Montserrat_700Bold',
         color: "#333",
         marginBottom: 20,
         textAlign: "center",
     },
-
     input: {
         width: "100%",
         height: 50,
@@ -118,8 +133,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         marginBottom: 15,
         backgroundColor: "#fff",
-        fontSize: 15,
-        fontFamily: 'Montserrat_500Medium'
+        fontSize: 13,
+        fontFamily: 'Montserrat_400Regular',
     },
     signupText: {
         marginTop: 15,
@@ -130,20 +145,18 @@ const styles = StyleSheet.create({
     },
     signupLink: {
         color: "#2196F3",
-        fontWeight: "bold",
+        fontFamily: 'Montserrat_700Bold',
+        fontSize: 12,
     },
-
     loginBtn: {
         backgroundColor: "#e84393",
         padding: 10,
         borderRadius: 5,
         alignItems: "center",
     },
-
     btnText: {
         color: "#fff",
-        fontSize: 13,
-        fontFamily: 'Montserrat_500Medium'
+        fontSize: 12,
+        fontFamily: 'Montserrat_600SemiBold',
     },
 });
-

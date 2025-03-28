@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { Card, Text, TextInput, Button } from "react-native-paper";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { addTask } from "../../reducer/taskSlice";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../utils/firebaseConfig";
 import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
-import {useFonts} from "expo-font";
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
 
 // Define TypeScript types for navigation
 type RootStackParamList = {
@@ -18,9 +18,8 @@ type RootStackParamList = {
 
 const AddTask = () => {
     const [description, setDescription] = useState("");
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(""); // Changed to string instead of Date object
     const [time, setTime] = useState("");
-    const [showDatePicker, setShowDatePicker] = useState(false);
 
     const [fontsLoaded] = useFonts({
         Montserrat_400Regular,
@@ -28,8 +27,8 @@ const AddTask = () => {
         Montserrat_600SemiBold,
     });
 
-    if (fontsLoaded) {
-        console.log("load font")
+    if (!fontsLoaded) {
+        return <AppLoading/>
     }
 
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -40,14 +39,14 @@ const AddTask = () => {
             try {
                 const newTask = {
                     description,
-                    date: date.toDateString(),
+                    date,
                     time,
                     completed: false,
                     createdAt: Timestamp.now(),
                 };
 
                 const docRef = await addDoc(collection(db, "tasks"), newTask);
-                dispatch(addTask({ id: docRef.id, description, date: date.toDateString(), time, completed: false }));
+                dispatch(addTask({ id: docRef.id, description, date, time, completed: false }));
                 console.log("Task added to Firestore and Redux Store");
             } catch (error) {
                 console.error("Error saving task:", error);
@@ -70,24 +69,12 @@ const AddTask = () => {
                     style={[styles.input, styles.textArea, { fontFamily: 'Montserrat_500Medium' }]}
                 />
                 <TextInput
-                    placeholder="Date"
-                    value={date.toDateString()}
+                    placeholder="Date (e.g., 2023-03-29)"
+                    value={date}
+                    onChangeText={setDate}
                     style={[styles.input, { fontFamily: 'Montserrat_500Medium' }]}
                     placeholderTextColor="#aaa"
-                    onFocus={() => setShowDatePicker(true)}
-                    showSoftInputOnFocus={false}
                 />
-                {showDatePicker && (
-                    <DateTimePicker
-                        value={date}
-                        mode="date"
-                        display="default"
-                        onChange={(event, selectedDate) => {
-                            setShowDatePicker(false);
-                            if (selectedDate) setDate(selectedDate);
-                        }}
-                    />
-                )}
                 <TextInput
                     placeholder="Time"
                     value={time}
@@ -106,7 +93,7 @@ const AddTask = () => {
 const styles = StyleSheet.create({
     container: { flexGrow: 1, padding: 20, backgroundColor: "#f5f5f5" },
     card: { padding: 30, borderRadius: 10, elevation: 5, backgroundColor: "#ffbcf7" },
-    heading: { textAlign: "center",  fontFamily: 'Montserrat_500Medium', marginBottom: 20, fontSize: 18,},
+    heading: { textAlign: "center", fontFamily: 'Montserrat_500Medium', marginBottom: 20, fontSize: 18 },
     input: {
         marginBottom: 15,
         fontFamily: 'Montserrat_500Medium',
@@ -121,7 +108,7 @@ const styles = StyleSheet.create({
     button: { marginTop: 20, backgroundColor: "#e84393" },
     buttonText: {
         fontFamily: 'Montserrat_500Medium',
-        fontSize: 16
+        fontSize: 16,
     },
 });
 
