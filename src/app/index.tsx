@@ -1,42 +1,35 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import { View, Text, ActivityIndicator, Animated, Easing, ImageBackground } from "react-native";
+import { View, Text, ActivityIndicator, Animated } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { useFonts } from "expo-font"; // Import the useFonts hook
-
-// Import your image asset using relative path
+import { useFonts, LilitaOne_400Regular } from "@expo-google-fonts/lilita-one";
 
 export default function Index() {
     const router = useRouter();
 
     const [fontsLoaded] = useFonts({
-        'Lilita One': require('../../assets/fonts/LilitaOne-Regular.ttf'), // Replace with your font file path
-        'Boba Party': require('../../assets/fonts/Boba Party.ttf'), // Replace with your font file path
+        LilitaOne: LilitaOne_400Regular,
     });
-
-
 
     useEffect(() => {
         setTimeout(() => {
             router.replace("/login");
-        }, 5000); // Wait for 5 seconds before redirecting
+        }, 5000);
     }, []);
 
     if (!fontsLoaded) {
-        console.log("index log");
+        return <ActivityIndicator size="large" color="#747d8c" />;
     }
 
     return (
         <View style={{ justifyContent: "center", alignItems: "center", marginTop: "50%" }}>
             <Animated.Text
-                style={[
-                    {
-                        fontSize: 36,
-                        fontWeight: "bold",
-                        color: "#e84393",
-                        fontFamily: "Lilita One",
-                    },
-                ]}
+                style={{
+                    fontSize: 36,
+                    fontWeight: "bold",
+                    color: "#e84393",
+                    fontFamily: "LilitaOne",
+                }}
             >
                 TaskMate
             </Animated.Text>
@@ -52,3 +45,4 @@ export default function Index() {
         </View>
     );
 }
+
