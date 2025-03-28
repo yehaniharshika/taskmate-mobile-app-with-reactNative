@@ -16,7 +16,6 @@ export default function Login() {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Firestore එකෙන් පරිශීලක විස්තර ගන්න
             const userDoc = await getDoc(doc(db, "users", user.uid));
 
             if (userDoc.exists()) {

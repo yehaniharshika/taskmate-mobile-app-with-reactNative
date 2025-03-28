@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function Layout() {
     return (
@@ -21,7 +22,7 @@ export default function Layout() {
             <Tabs.Screen
                 name="profile"
                 options={{
-                    tabBarIcon: () => <FontAwesome name="user" size={24} />,
+                    tabBarIcon: () => <MaterialCommunityIcons name="account" size={24} />, // User icon from MaterialCommunityIcons
                     title: "",
                 }}
             />
