@@ -1,5 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Modal, TextInput, ScrollView } from "react-native";
+import React, {useState, useEffect, useRef} from "react";
+import {
+    View,
+    Text,
+    FlatList,
+    TouchableOpacity,
+    StyleSheet,
+    Modal,
+    TextInput,
+    ScrollView,
+    Animated,
+    Easing
+} from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { collection, query, onSnapshot, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../utils/firebaseConfig";
@@ -38,7 +49,24 @@ const Home = () => {
             .catch((error) => console.log(error));
     }, []);
 
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
+    useEffect(() => {
+        Animated.parallel([
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 800,
+                useNativeDriver: true,
+            }),
+            Animated.timing(scaleAnim, {
+                toValue: 1,
+                duration: 800,
+                easing: Easing.out(Easing.exp),
+                useNativeDriver: true,
+            }),
+        ]).start();
+    }, []);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -104,7 +132,21 @@ const Home = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.screenTitle}>Welcome to TaskMate😍</Text>
+
+            <Animated.Text
+                style={{
+                    fontSize: 24,
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    marginBottom: 20,
+                    color: "#333",
+                    fontFamily: "MontserratBold",
+                    opacity: fadeAnim, // Fade-in effect
+                    transform: [{ scale: scaleAnim }], // Scale effect
+                }}
+            >
+                Welcome to TaskMate😍
+            </Animated.Text>
 
             <View style={styles.card}>
                 <Calendar

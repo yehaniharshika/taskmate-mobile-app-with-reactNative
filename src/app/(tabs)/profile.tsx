@@ -9,26 +9,41 @@ import {
     SafeAreaView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
+import {useFonts} from "expo-font";
+
 
 export default function Profile() {
     // Sample user data - replace with your actual user data source
     const [user, setUser] = useState({
-        name: 'Nishan Tharaka',
-        email: 'nishantharaka2004@gmail.com',
-        bio: 'A passionate developer.',
-        joinDate: '2025-02-15',
+        name: 'Yehani Harshika',
+        email: 'yehapamunuwa@gmail.com',
+        bio: 'Where ambition meets action, success follows 🧑🏼‍💻',
+        joinDate: '2025-03-15',
         notesCount: 27,
         profileImage: null, // This would be a URI in a real app
         theme: 'white',
         notifications: true,
         syncEnabled: true,
-        address: 'Kalutara,Sri lanka',
-        phoneNumber: '+94 -76 431 3575',
+        address: 'Polonnaruwa,Sri lanka',
+        phoneNumber: '+94 76 400 4560',
         socialLinks: {
-            facebook: 'https://facebook.com/alexjohnson',
-            twitter: 'https://twitter.com/alexjohnson'
+            facebook: 'https://facebook.com/yeha',
+            twitter: 'https://twitter.com/yeha',
+            linkedIn: 'https://linkedin.com/yeha',
+            instagram: 'https://instagram.com/yeha',
         }
     });
+
+    const [fontsLoaded] = useFonts({
+        Montserrat_400Regular,
+        Montserrat_500Medium,
+        Montserrat_600SemiBold,
+    });
+
+    if (!fontsLoaded) {
+        return <Text>Loading...</Text>; // You can show a loading screen here
+    }
 
 
     const toggleTheme = () => {
@@ -74,7 +89,6 @@ export default function Profile() {
     };
 
     const handleSignOut = () => {
-        // Sign out logic
         console.log('Sign out');
     };
 
@@ -111,18 +125,6 @@ export default function Profile() {
                     <Text style={styles.userBio}>{user.bio}</Text>
                 </View>
 
-                {/* User stats */}
-                <View style={styles.statsContainer}>
-                    <View style={styles.statItem}>
-                        <Text style={styles.statValue}>{user.notesCount}</Text>
-                        <Text style={styles.statLabel}>Notes</Text>
-                    </View>
-                    <View style={styles.statDivider} />
-                    <View style={styles.statItem}>
-                        <Text style={styles.statValue}>{formatDate(user.joinDate)}</Text>
-                        <Text style={styles.statLabel}>Member Since</Text>
-                    </View>
-                </View>
 
                 {/* Action buttons */}
                 <View style={styles.actionButtons}>
@@ -130,14 +132,14 @@ export default function Profile() {
                         style={styles.actionButton}
                         onPress={handleEditProfile}
                     >
-                        <Ionicons name="create-outline" size={22} color="#6200ee" />
+                        <Ionicons name="create-outline" size={22} color="#6F1E51" />
                         <Text style={styles.actionButtonText}>Edit Profile</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.actionButton}
                         onPress={handleShareProfile}
                     >
-                        <Ionicons name="share-outline" size={22} color="#6200ee" />
+                        <Ionicons name="share-outline" size={22} color="#6F1E51" />
                         <Text style={styles.actionButtonText}>Share Profile</Text>
                     </TouchableOpacity>
                 </View>
@@ -149,7 +151,7 @@ export default function Profile() {
                     {/* Theme Setting */}
                     <View style={styles.settingItem}>
                         <View style={styles.settingIconContainer}>
-                            <Ionicons name="moon-outline" size={22} color="#6200ee" />
+                            <Ionicons name="moon-outline" size={22} color="#e84393" />
                         </View>
                         <View style={styles.settingTextContainer}>
                             <Text style={styles.settingTitle}>Dark Mode</Text>
@@ -170,7 +172,7 @@ export default function Profile() {
                     {/* Notifications Setting */}
                     <View style={styles.settingItem}>
                         <View style={styles.settingIconContainer}>
-                            <Ionicons name="notifications-outline" size={22} color="#6200ee" />
+                            <Ionicons name="notifications-outline" size={22} color="#e84393" />
                         </View>
                         <View style={styles.settingTextContainer}>
                             <Text style={styles.settingTitle}>Notifications</Text>
@@ -191,12 +193,12 @@ export default function Profile() {
                     {/* Cloud Sync Setting */}
                     <View style={styles.settingItem}>
                         <View style={styles.settingIconContainer}>
-                            <Ionicons name="cloud-upload-outline" size={22} color="#6200ee" />
+                            <Ionicons name="cloud-upload-outline" size={22} color="#e84393" />
                         </View>
                         <View style={styles.settingTextContainer}>
-                            <Text style={styles.settingTitle}>Cloud Sync</Text>
+                            <Text style={styles.settingTitle}>Task Sync</Text>
                             <Text style={styles.settingDescription}>
-                                Sync notes across devices
+                                Sync tasks across devices
                             </Text>
                         </View>
                         <TouchableOpacity
@@ -242,13 +244,29 @@ export default function Profile() {
                 {/* Social Media Links */}
                 <View style={[styles.socialLinksContainer, styles.cardContainer]}>
                     <Text style={styles.sectionTitle}>Social Links</Text>
+
+                    {/* Facebook Link */}
                     <View style={styles.socialLinkItem}>
                         <Ionicons name="logo-facebook" size={22} color="#3b5998" />
                         <Text style={styles.socialLinkText}>{user.socialLinks.facebook}</Text>
                     </View>
+
+                    {/* Twitter Link */}
                     <View style={styles.socialLinkItem}>
                         <Ionicons name="logo-twitter" size={22} color="#00acee" />
                         <Text style={styles.socialLinkText}>{user.socialLinks.twitter}</Text>
+                    </View>
+
+                    {/* LinkedIn Link */}
+                    <View style={styles.socialLinkItem}>
+                        <Ionicons name="logo-linkedin" size={22} color="#0077b5" />
+                        <Text style={styles.socialLinkText}>{user.socialLinks.linkedIn}</Text>
+                    </View>
+
+                    {/* Instagram Link */}
+                    <View style={styles.socialLinkItem}>
+                        <Ionicons name="logo-instagram" size={22} color="#e4405f" />
+                        <Text style={styles.socialLinkText}>{user.socialLinks.instagram}</Text>
                     </View>
                 </View>
 
@@ -258,8 +276,6 @@ export default function Profile() {
                     <Text style={styles.contactText}>Address: {user.address}</Text>
                     <Text style={styles.contactText}>Phone: {user.phoneNumber}</Text>
                 </View>
-
-                <Text style={styles.versionText}>Notes App v1.0.0</Text>
             </ScrollView>
         </SafeAreaView>
     );
@@ -288,7 +304,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 50,
-        backgroundColor: '#6200ee',
+        backgroundColor: '#e84393',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -296,6 +312,7 @@ const styles = StyleSheet.create({
         fontSize: 36,
         color: '#fff',
         fontWeight: 'bold',
+        fontFamily: 'Montserrat_500Medium'
     },
     profileImage: {
         width: 100,
@@ -306,7 +323,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         right: 0,
-        backgroundColor: '#6200ee',
+        backgroundColor: '#e84393',
         width: 36,
         height: 36,
         borderRadius: 18,
@@ -320,15 +337,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333',
         marginBottom: 4,
+        fontFamily: 'Montserrat_500Medium'
     },
     userEmail: {
         fontSize: 16,
         color: '#666',
+        fontFamily: 'Montserrat_500Medium'
     },
     userBio: {
         fontSize: 14,
-        color: '#777',
+        color: '#1B1464',
         marginTop: 4,
+        fontFamily: 'Montserrat_500Medium'
     },
     statsContainer: {
         flexDirection: 'row',
@@ -361,6 +381,7 @@ const styles = StyleSheet.create({
     statLabel: {
         fontSize: 14,
         color: '#666',
+        fontFamily: 'Montserrat_500Medium'
     },
     actionButtons: {
         flexDirection: 'row',
@@ -370,7 +391,7 @@ const styles = StyleSheet.create({
     actionButton: {
         flex: 1,
         flexDirection: 'row',
-        backgroundColor: '#fff',
+        backgroundColor: '#ffd9fa',
         paddingVertical: 12,
         paddingHorizontal: 16,
         borderRadius: 8,
@@ -385,9 +406,10 @@ const styles = StyleSheet.create({
     },
     actionButtonText: {
         fontSize: 14,
-        color: '#6200ee',
-        fontWeight: '500',
+        color: '#6F1E51',
+        fontWeight: '800',
         marginLeft: 8,
+        fontFamily: 'Montserrat_500Medium'
     },
     settingsSection: {
         backgroundColor: '#fff',
@@ -406,6 +428,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333',
         marginBottom: 16,
+        fontFamily: 'Montserrat_500Medium'
     },
     settingItem: {
         flexDirection: 'row',
@@ -418,7 +441,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#f0f0ff',
+        backgroundColor: '#ffd9fa',
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 12,
@@ -430,11 +453,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '500',
         color: '#333',
+        fontFamily: 'Montserrat_500Medium'
     },
     settingDescription: {
-        fontSize: 14,
+        fontSize: 13,
         color: '#777',
         marginTop: 2,
+        fontFamily: 'Montserrat_500Medium'
     },
     settingToggle: {
         marginLeft: 8,
@@ -448,7 +473,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 2,
     },
     toggleTrackActive: {
-        backgroundColor: '#b388ff',
+        backgroundColor: '#ffbcf7',
     },
     toggleThumb: {
         width: 24,
@@ -490,6 +515,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#333',
         marginLeft: 12,
+        fontFamily: 'Montserrat_500Medium'
     },
     signOutButton: {
         flexDirection: 'row',
@@ -502,6 +528,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#f44336',
         marginLeft: 12,
+        fontFamily: 'Montserrat_500Medium'
     },
     cardContainer: {
         backgroundColor: '#fff',
@@ -527,6 +554,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginLeft: 12,
         color: '#555',
+        fontFamily: 'Montserrat_500Medium'
     },
     contactContainer: {
         marginTop: 24,
@@ -536,11 +564,6 @@ const styles = StyleSheet.create({
         color: '#555',
         marginBottom: 8,
         paddingVertical: 4,
-    },
-    versionText: {
-        fontSize: 12,
-        color: '#888',
-        textAlign: 'center',
-        marginTop: 32,
+        fontFamily: 'Montserrat_500Medium'
     },
 });
