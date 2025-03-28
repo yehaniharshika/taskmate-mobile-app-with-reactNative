@@ -14,7 +14,7 @@ import {useFonts} from "expo-font";
 
 
 export default function Profile() {
-    // Sample user data - replace with your actual user data source
+
     const [user, setUser] = useState({
         name: 'Yehani Harshika',
         email: 'yehapamunuwa@gmail.com',
