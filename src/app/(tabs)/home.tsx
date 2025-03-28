@@ -16,7 +16,8 @@ import { collection, query, onSnapshot, addDoc, updateDoc, doc, deleteDoc } from
 import { db } from "../../utils/firebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
-import * as Font from "expo-font";
+import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
+import {useFonts} from "expo-font";
 
 
 interface Task {
@@ -27,13 +28,6 @@ interface Task {
     completed: boolean;
 }
 
-const loadFonts = async () => {
-    await Font.loadAsync({
-        MontserratRegular: require("../../../assets/fonts/Montserrat-Regular.ttf"), // Regular font
-        MontserratBold: require("../../../assets/fonts/Montserrat-Bold.ttf"), // Bold font
-    });
-};
-
 const Home = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -41,13 +35,15 @@ const Home = () => {
     const [currentEntry, setCurrentEntry] = useState({ id: "", description: "", time: "", date: "" });
     const [isEditing, setIsEditing] = useState(false); // To track if it's edit mode
 
-    const [fontsLoaded, setFontsLoaded] = useState(false);
+    const [fontsLoaded] = useFonts({
+        Montserrat_400Regular,
+        Montserrat_500Medium,
+        Montserrat_600SemiBold,
+    });
 
-    useEffect(() => {
-        loadFonts()
-            .then(() => setFontsLoaded(true))
-            .catch((error) => console.log(error));
-    }, []);
+    if (fontsLoaded) {
+        console.log("load font")
+    }
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const scaleAnim = useRef(new Animated.Value(0.8)).current;
@@ -140,7 +136,7 @@ const Home = () => {
                     textAlign: "center",
                     marginBottom: 20,
                     color: "#333",
-                    fontFamily: "MontserratBold",
+                    fontFamily: 'Montserrat_500Medium',
                     opacity: fadeAnim, // Fade-in effect
                     transform: [{ scale: scaleAnim }], // Scale effect
                 }}
@@ -206,7 +202,7 @@ const Home = () => {
                             onChangeText={(text) => setCurrentEntry({ ...currentEntry, time: text })}
                             placeholder="Task Time"
                         />
-                        <Text style={{ marginBottom: 15 ,fontFamily: "MontserratBold",}}>Selected Date: {selectedDate || "No Date Selected"}</Text>
+                        <Text style={{ marginBottom: 15 ,fontFamily: 'Montserrat_500Medium'}}>Selected Date: {selectedDate || "No Date Selected"}</Text>
                         <View style={{ flexDirection: "row", justifyContent: "center", width: "60%", alignItems: "center" }}>
                             <TouchableOpacity onPress={handleAddTask} style={[styles.modalButton, { flex: 1, marginRight: 5 }]}>
                                 <Text style={styles.modalButtonText}>{isEditing ? "Update Task" : "Add Task"}</Text>
@@ -230,7 +226,7 @@ const styles = StyleSheet.create({
     taskCardContainer: { marginBottom: 16 },
     calendar: {
         borderRadius: 10,
-        fontFamily: "MontserratBold",
+        fontFamily: 'Montserrat_500Medium'
     },
     taskActions: {
         flexDirection: "row",
@@ -239,7 +235,7 @@ const styles = StyleSheet.create({
     taskDate: { fontSize: 16, fontWeight: "bold", marginBottom: 8 },
     taskCard: { backgroundColor: "#ffbcf7", padding: 12, borderRadius: 8 },
     taskItem: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderBottomWidth: 1, borderBottomColor: "#ddd", paddingBottom: 8, marginBottom: 12 },
-    taskText: { fontSize: 16, color: "#333" ,fontFamily:"MontserratRegular"},
+    taskText: { fontSize: 16, color: "#333" ,fontFamily: 'Montserrat_500Medium'},
     iconButton: { padding: 5, marginLeft: 10 },
     deleteButton: { backgroundColor: "red", borderRadius: 5, padding: 5 },
     addButton: { position: "absolute", bottom: 30, right: 30 },
@@ -250,7 +246,7 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
         borderRadius: 5,
         marginBottom: 10,
-        fontFamily: "MontserratRegular",
+        fontFamily: 'Montserrat_500Medium',
         fontSize: 10,
     },
     modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.5)" },
@@ -263,7 +259,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
 
-    modalButtonText: { color: "#fff", fontWeight: "bold" ,fontFamily: "MontserratBold",},
+    modalButtonText: { color: "#fff", fontWeight: "bold" ,fontFamily: 'Montserrat_500Medium',},
 });
 
 export default Home;

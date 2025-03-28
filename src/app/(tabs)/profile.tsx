@@ -11,10 +11,12 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
 import {useFonts} from "expo-font";
+import {useRouter} from "expo-router";
 
 
 export default function Profile() {
 
+    const router = useRouter();
     const [user, setUser] = useState({
         name: 'Yehani Harshika',
         email: 'yehapamunuwa@gmail.com',
@@ -90,6 +92,7 @@ export default function Profile() {
 
     const handleSignOut = () => {
         console.log('Sign out');
+        router.push("/");
     };
 
     const formatDate = (dateString: string | number | Date) => {

@@ -5,11 +5,24 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../utils/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import {Card} from "react-native-paper";
+import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
+import {useFonts} from "expo-font";
 
 export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const [fontsLoaded] = useFonts({
+        Montserrat_400Regular,
+        Montserrat_500Medium,
+        Montserrat_600SemiBold,
+    });
+
+    if (fontsLoaded) {
+        console.log("load font")
+    }
+
 
     const loginUser = async () => {
         try {
