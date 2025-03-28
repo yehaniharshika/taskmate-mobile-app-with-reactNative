@@ -146,7 +146,7 @@ const Home = () => {
             </ScrollView>
 
             <TouchableOpacity onPress={() => { setIsEditing(false); setIsModalVisible(true); }} style={styles.addButton}>
-                <Ionicons name="add-circle" size={60} color="blue" />
+                <Ionicons name="add-circle" size={60} color="#e84393" />
             </TouchableOpacity>
 
             <Modal visible={isModalVisible} animationType="slide" transparent={true}>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     taskDate: { fontSize: 16, fontWeight: "bold", marginBottom: 8 },
-    taskCard: { backgroundColor: "pink", padding: 12, borderRadius: 8 },
+    taskCard: { backgroundColor: "#ffbcf7", padding: 12, borderRadius: 8 },
     taskItem: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderBottomWidth: 1, borderBottomColor: "#ddd", paddingBottom: 8, marginBottom: 12 },
     taskText: { fontSize: 16, color: "#333" ,fontFamily:"MontserratRegular"},
     iconButton: { padding: 5, marginLeft: 10 },
