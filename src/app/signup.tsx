@@ -5,12 +5,24 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../utils/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import {Card} from "react-native-paper";
+import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
+import {useFonts} from "expo-font";
 
 const Signup = () => {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
+
+    const [fontsLoaded] = useFonts({
+        Montserrat_400Regular,
+        Montserrat_500Medium,
+        Montserrat_600SemiBold,
+    });
+
+    if (fontsLoaded) {
+        console.log("load font")
+    }
 
     const handleSignUp = async () => {
         try {
@@ -100,6 +112,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 5,
+        borderWidth:3,
+        borderColor: "#6F1E51"
     },
     title: {
         fontSize: 24,
@@ -114,20 +128,23 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
         borderRadius: 5,
         marginBottom: 10,
+        fontFamily: 'Montserrat_500Medium'
     },
     signupBtn: {
-        backgroundColor: "#007bff",
+        backgroundColor: "#e84393",
         padding: 10,
         borderRadius: 5,
         alignItems: "center",
     },
     btnText: {
         color: "#fff",
-        fontSize: 16,
+        fontSize: 15,
+        fontFamily: 'Montserrat_500Medium'
     },
     loginText: {
         marginTop: 10,
         textAlign: "center",
+        fontFamily: 'Montserrat_500Medium'
     },
     loginLink: {
         color: "#007bff",
