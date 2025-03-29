@@ -5,7 +5,6 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../utils/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { Card } from "react-native-paper";
-import AppLoading from 'expo-app-loading';
 import {
     useFonts,
     Montserrat_100Thin,
@@ -24,7 +23,9 @@ const Signup = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
-    let [fontsLoaded] = useFonts({
+
+    // Load fonts
+    const [fontsLoaded] = useFonts({
         Montserrat_100Thin,
         Montserrat_200ExtraLight,
         Montserrat_300Light,
@@ -36,9 +37,9 @@ const Signup = () => {
         Montserrat_900Black,
     });
 
-    // Wait for fonts to load before rendering the UI
+    // Ensure fonts are loaded before rendering
     if (!fontsLoaded) {
-        return <AppLoading />;
+        return <Text>Loading Fonts...</Text>; // Avoid using AppLoading
     }
 
     const handleSignUp = async () => {
@@ -73,33 +74,33 @@ const Signup = () => {
     return (
         <View style={styles.container}>
             <Card style={styles.card}>
-                <Text style={[styles.title, { fontFamily: 'Montserrat_700Bold' }]}>Sign Up</Text>
+                <Text style={styles.title}>Sign Up</Text>
                 <TextInput
-                    style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]}
+                    style={styles.input}
                     placeholder="Name"
                     value={name}
                     onChangeText={setName}
                 />
                 <TextInput
-                    style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]}
+                    style={styles.input}
                     placeholder="Email"
                     keyboardType="email-address"
                     value={email}
                     onChangeText={setEmail}
                 />
                 <TextInput
-                    style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]}
+                    style={styles.input}
                     placeholder="Password"
                     secureTextEntry
                     value={password}
                     onChangeText={setPassword}
                 />
                 <TouchableOpacity style={styles.signupBtn} onPress={handleSignUp}>
-                    <Text style={[styles.btnText, { fontFamily: 'Montserrat_600SemiBold' }]}>Sign Up</Text>
+                    <Text style={styles.btnText}>Sign Up</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => router.push("login")}>
-                    <Text style={[styles.loginText, { fontFamily: 'Montserrat_500Medium' }]}>
-                        Already have an account? <Text style={[styles.loginLink,{ fontFamily: 'Montserrat_400Regular' }]}>Log in</Text>
+                    <Text style={styles.loginText}>
+                        Already have an account? <Text style={styles.loginLink}>Login</Text>
                     </Text>
                 </TouchableOpacity>
             </Card>
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 15,
         textAlign: "center",
-        fontFamily: 'Montserrat_700Bold'
+        fontFamily: "Montserrat_800ExtraBold",
     },
     input: {
         width: "100%",
@@ -143,7 +144,8 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
         borderRadius: 5,
         marginBottom: 10,
-        fontSize: 13
+        fontSize: 13,
+        fontFamily: "Montserrat_400Regular",
     },
     signupBtn: {
         backgroundColor: "#e84393",
@@ -153,16 +155,17 @@ const styles = StyleSheet.create({
     },
     btnText: {
         color: "#fff",
-        fontSize: 12
+        fontSize: 12,
+        fontFamily: "Montserrat_600SemiBold",
     },
     loginText: {
         marginTop: 10,
         textAlign: "center",
+        fontFamily: "Montserrat_500Medium",
     },
     loginLink: {
         color: "#007bff",
-        fontWeight: "bold",
         fontSize: 12,
-        fontFamily: 'Montserrat_700Bold',
+        fontFamily: "Montserrat_600SemiBold",
     },
 });

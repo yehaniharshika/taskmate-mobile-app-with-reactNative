@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     View,
     Text,
@@ -16,10 +16,8 @@ import { collection, query, onSnapshot, addDoc, updateDoc, doc, deleteDoc } from
 import { db } from "../../utils/firebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
 import { Calendar } from "react-native-calendars";
-import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
-import {useFonts} from "expo-font";
+import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
-
 
 interface Task {
     id: string;
@@ -34,20 +32,25 @@ const Home = () => {
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [currentEntry, setCurrentEntry] = useState({ id: "", description: "", time: "", date: "" });
-    const [isEditing, setIsEditing] = useState(false); // To track if it's edit mode
-
-    const [fontsLoaded] = useFonts({
-        Montserrat_400Regular,
-        Montserrat_500Medium,
-        Montserrat_600SemiBold,
-    });
-
-    if (!fontsLoaded) {
-        return <AppLoading />;
-    }
+    const [isEditing, setIsEditing] = useState(false);
+    const [fontsLoaded, setFontsLoaded] = useState(false);
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const scaleAnim = useRef(new Animated.Value(0.8)).current;
+
+    // Load fonts
+    useEffect(() => {
+        async function loadFonts() {
+            await Font.loadAsync({
+                "Montserrat-Regular": require("../../../assets/fonts/Montserrat-Regular.ttf"),
+                "Montserrat-Medium": require("../../../assets/fonts/Montserrat-Medium.ttf"),
+                "Montserrat-SemiBold": require("../../../assets/fonts/Montserrat-SemiBold.ttf"),
+                "Montserrat-Bold": require("../../../assets/fonts/Montserrat-Bold.ttf"),
+            });
+            setFontsLoaded(true);
+        }
+        loadFonts();
+    }, []);
 
     useEffect(() => {
         Animated.parallel([
@@ -90,7 +93,6 @@ const Home = () => {
         }
 
         if (isEditing) {
-            // If editing, update the task in Firebase
             await updateDoc(doc(db, "tasks", currentEntry.id), {
                 description: currentEntry.description,
                 time: currentEntry.time,
@@ -98,13 +100,20 @@ const Home = () => {
             });
             alert("Task updated successfully!");
         } else {
-            // If adding new task
-            await addDoc(collection(db, "tasks"), {
+            const docRef = await addDoc(collection(db, "tasks"), {
                 description: currentEntry.description,
                 time: currentEntry.time,
                 date: selectedDate,
                 completed: false,
             });
+
+            setTasks(prevTasks => [{
+                id: docRef.id,
+                description: currentEntry.description,
+                time: currentEntry.time,
+                date: selectedDate,
+                completed: false
+            }, ...prevTasks]);
         }
 
         setCurrentEntry({ id: "", description: "", time: "", date: "" });
@@ -112,8 +121,9 @@ const Home = () => {
         setIsModalVisible(false);
     };
 
+
     const handleEditTask = (task: Task) => {
-        setCurrentEntry(task); // Set the selected task data
+        setCurrentEntry(task);
         setSelectedDate(task.date);
         setIsEditing(true);
         setIsModalVisible(true);
@@ -127,29 +137,27 @@ const Home = () => {
         await deleteDoc(doc(db, "tasks", taskId));
     };
 
+    if (!fontsLoaded) {
+        return <AppLoading />;
+    }
+
     return (
         <View style={styles.container}>
-
-            <Animated.Text
-                style={{
-                    fontSize: 24,
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    marginBottom: 20,
-                    color: "#333",
-                    fontFamily: 'Montserrat_500Medium',
-                    opacity: fadeAnim, // Fade-in effect
-                    transform: [{ scale: scaleAnim }], // Scale effect
-                }}
-            >
-                Welcome to TaskMate😍
+            <Animated.Text style={[styles.screenTitle, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
+                Welcome to TaskMate 😍
             </Animated.Text>
 
             <View style={styles.card}>
                 <Calendar
                     onDayPress={onDayPress}
                     style={styles.calendar}
-                    theme={{ todayTextColor: '#00adf5' }}
+                    theme={{
+                        todayTextColor: '#e84393',
+                        fontSize:12,
+                        textDayFontFamily: 'Montserrat-SemiBold',
+                        textMonthFontFamily: 'Montserrat-SemiBold',
+                        textDayHeaderFontFamily: 'Montserrat-SemiBold'
+                    }}
                 />
             </View>
 
@@ -191,24 +199,14 @@ const Home = () => {
             <Modal visible={isModalVisible} animationType="slide" transparent={true}>
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
-                        <TextInput
-                            style={styles.input}
-                            value={currentEntry.description}
-                            onChangeText={(text) => setCurrentEntry({ ...currentEntry, description: text })}
-                            placeholder="Task Description"
-                        />
-                        <TextInput
-                            style={styles.input}
-                            value={currentEntry.time}
-                            onChangeText={(text) => setCurrentEntry({ ...currentEntry, time: text })}
-                            placeholder="Task Time"
-                        />
-                        <Text style={{ marginBottom: 15 ,fontFamily: 'Montserrat_500Medium'}}>Selected Date: {selectedDate || "No Date Selected"}</Text>
-                        <View style={{ flexDirection: "row", justifyContent: "center", width: "60%", alignItems: "center" }}>
-                            <TouchableOpacity onPress={handleAddTask} style={[styles.modalButton, { flex: 1, marginRight: 5}]}>
+                        <TextInput style={styles.input} value={currentEntry.description} onChangeText={(text) => setCurrentEntry({ ...currentEntry, description: text })} placeholder="Task Description" />
+                        <TextInput style={styles.input} value={currentEntry.time} onChangeText={(text) => setCurrentEntry({ ...currentEntry, time: text })} placeholder="Task Time" />
+                        <Text style={styles.selectedDate}>Selected Date: {selectedDate || "No Date Selected"}</Text>
+                        <View style={styles.modalButtons}>
+                            <TouchableOpacity onPress={handleAddTask} style={styles.modalButton}>
                                 <Text style={styles.modalButtonText}>{isEditing ? "Update" : "Add"}</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setIsModalVisible(false)} style={[styles.modalButton, { flex: 1, backgroundColor: "gray", marginLeft: 5 }]}>
+                            <TouchableOpacity onPress={() => setIsModalVisible(false)} style={[styles.modalButton, styles.cancelButton]}>
                                 <Text style={styles.modalButtonText}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
@@ -220,47 +218,127 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: "#f5f5f5", padding: 20 },
-    screenTitle: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20, color: "#333" ,fontFamily: 'Montserrat_500Medium'},
-    card: { backgroundColor: "#fff", borderRadius: 10, padding: 10, marginBottom: 20 },
-    taskListContainer: { flex: 1 },
-    taskCardContainer: { marginBottom: 16 },
+    container: {
+        flex: 1,
+        backgroundColor: "#f8f9fa",
+        padding: 20,
+    },
+    screenTitle: {
+        fontSize: 22,
+        fontFamily: "Montserrat-Bold",
+        textAlign: "center",
+        marginVertical: 20,
+        color: "#333",
+    },
+    card: {
+        backgroundColor: "#fff",
+        padding: 15,
+        borderRadius: 10,
+        elevation: 5,
+        marginBottom: 20,
+        borderWidth:2,
+        borderColor: "#e84393"
+    },
     calendar: {
         borderRadius: 10,
-        fontFamily: 'Montserrat_500Medium'
+    },
+    taskListContainer: {
+        flex: 1,
+    },
+    taskCardContainer: {
+        marginBottom: 20,
+    },
+    taskDate: {
+        fontSize: 11,
+        fontFamily: "Montserrat-Bold",
+        marginBottom: 10,
+        color: "#b71540",
+    },
+    taskCard: {
+        backgroundColor: "#ffd9fa",
+        borderRadius: 10,
+        padding: 15,
+        elevation: 3,
+        borderWidth:2,
+        borderColor: "#e84393"
+    },
+    taskItem: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 10,
+    },
+    taskText: {
+        fontSize: 12,
+        fontFamily: "Montserrat-Regular",
     },
     taskActions: {
         flexDirection: "row",
         alignItems: "center",
     },
-    taskDate: { fontSize: 14, fontWeight: "bold", marginBottom: 8,fontFamily: 'Montserrat_500Medium', },
-    taskCard: { backgroundColor: "#ffd7fa", padding: 12, borderRadius: 8 },
-    taskItem: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderBottomWidth: 1, borderBottomColor: "#ddd", paddingBottom: 8, marginBottom: 12 },
-    taskText: { fontSize: 11, color: "#333" ,fontFamily: 'Montserrat_500Medium'},
-    iconButton: { padding: 5, marginLeft: 10 },
-    deleteButton: { backgroundColor: "#e84393", borderRadius: 5, padding: 4 },
-    addButton: { position: "absolute", bottom: 30, right: 30 },
-    input: {
-        width: "100%",
-        padding: 10,
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 5,
-        marginBottom: 10,
-        fontFamily: 'Montserrat_500Medium',
-        fontSize: 10,
+    iconButton: {
+        padding: 5,
     },
-    modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.5)" },
-    modalContent: { backgroundColor: "#fff", padding: 20, borderRadius: 10, width: "80%", alignItems: "center" },
+    deleteButton: {
+        backgroundColor: "#e84393",
+        borderRadius: 5,
+        padding: 4,
+        marginLeft: 10,
+        fontSize:9
+    },
+    addButton: {
+        position: "absolute",
+        bottom: 30,
+        right: 30,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0,0,0,0.5)",
+    },
+    modalContent: {
+        backgroundColor: "#fff",
+        padding: 20,
+        borderRadius: 10,
+        width: "80%",
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: "#ddd",
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
+        fontFamily: "Montserrat-Regular",
+        fontSize:12
+    },
+    selectedDate: {
+        fontSize: 12,
+        fontFamily: "Montserrat-Bold",
+        textAlign: "center",
+        marginBottom: 10,
+    },
+    modalButtons: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
     modalButton: {
         backgroundColor: "#e84393",
         padding: 10,
         borderRadius: 5,
+        flex: 1,
         alignItems: "center",
-        justifyContent: "center",
+        marginHorizontal: 5,
     },
-
-    modalButtonText: { color: "#fff", fontWeight: "bold" ,fontFamily: 'Montserrat_500Medium',},
+    cancelButton: {
+        backgroundColor: "#ccc",
+    },
+    modalButtonText: {
+        color: "#fff",
+        fontFamily: "Montserrat-SemiBold",
+        fontSize:12
+    },
 });
+
 
 export default Home;

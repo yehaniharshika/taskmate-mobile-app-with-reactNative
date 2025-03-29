@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View,
     Text,
@@ -9,9 +9,8 @@ import {
     SafeAreaView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Montserrat_400Regular, Montserrat_500Medium, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat';
-import {useFonts} from "expo-font";
 import {useRouter} from "expo-router";
+import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 
 
@@ -38,16 +37,25 @@ export default function Profile() {
         }
     });
 
-    const [fontsLoaded] = useFonts({
-        Montserrat_400Regular,
-        Montserrat_500Medium,
-        Montserrat_600SemiBold,
-    });
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    // Load fonts
+    useEffect(() => {
+        async function loadFonts() {
+            await Font.loadAsync({
+                "Montserrat-Regular": require("../../../assets/fonts/Montserrat-Regular.ttf"),
+                "Montserrat-Medium": require("../../../assets/fonts/Montserrat-Medium.ttf"),
+                "Montserrat-SemiBold": require("../../../assets/fonts/Montserrat-SemiBold.ttf"),
+                "Montserrat-Bold": require("../../../assets/fonts/Montserrat-Bold.ttf"),
+            });
+            setFontsLoaded(true);
+        }
+        loadFonts();
+    }, []);
 
     if (!fontsLoaded) {
-        return <AppLoading/>; // You can show a loading screen here
+        return <AppLoading />;
     }
-
 
     const toggleTheme = () => {
         setUser(prevUser => ({
@@ -316,7 +324,7 @@ const styles = StyleSheet.create({
         fontSize: 36,
         color: '#fff',
         fontWeight: 'bold',
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Bold'
     },
     profileImage: {
         width: 100,
@@ -341,18 +349,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#333',
         marginBottom: 4,
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     userEmail: {
         fontSize: 12,
         color: '#666',
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     userBio: {
         fontSize: 10,
         color: '#1B1464',
         marginTop: 4,
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     statsContainer: {
         flexDirection: 'row',
@@ -385,7 +393,7 @@ const styles = StyleSheet.create({
     statLabel: {
         fontSize: 14,
         color: '#666',
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     actionButtons: {
         flexDirection: 'row',
@@ -409,11 +417,11 @@ const styles = StyleSheet.create({
         shadowRadius: 1,
     },
     actionButtonText: {
-        fontSize: 14,
+        fontSize: 12,
         color: '#6F1E51',
         fontWeight: '800',
         marginLeft: 8,
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     settingsSection: {
         backgroundColor: '#fff',
@@ -431,8 +439,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#333',
-        marginBottom: 16,
-        fontFamily: 'Montserrat_500Medium'
+        marginBottom: 14,
+        fontFamily: 'Montserrat-Medium'
     },
     settingItem: {
         flexDirection: 'row',
@@ -457,13 +465,13 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: '#333',
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     settingDescription: {
         fontSize: 13,
         color: '#777',
         marginTop: 2,
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     settingToggle: {
         marginLeft: 8,
@@ -519,7 +527,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#333',
         marginLeft: 12,
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     signOutButton: {
         flexDirection: 'row',
@@ -532,7 +540,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#f44336',
         marginLeft: 12,
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     cardContainer: {
         backgroundColor: '#fff',
@@ -558,7 +566,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginLeft: 12,
         color: '#555',
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
     contactContainer: {
         marginTop: 24,
@@ -568,6 +576,6 @@ const styles = StyleSheet.create({
         color: '#555',
         marginBottom: 8,
         paddingVertical: 4,
-        fontFamily: 'Montserrat_500Medium'
+        fontFamily: 'Montserrat-Medium'
     },
 });
