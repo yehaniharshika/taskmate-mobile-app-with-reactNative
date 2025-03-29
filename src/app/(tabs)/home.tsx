@@ -100,27 +100,18 @@ const Home = () => {
             });
             alert("Task updated successfully!");
         } else {
-            const docRef = await addDoc(collection(db, "tasks"), {
+            await addDoc(collection(db, "tasks"), {
                 description: currentEntry.description,
                 time: currentEntry.time,
                 date: selectedDate,
                 completed: false,
             });
-
-            setTasks(prevTasks => [{
-                id: docRef.id,
-                description: currentEntry.description,
-                time: currentEntry.time,
-                date: selectedDate,
-                completed: false
-            }, ...prevTasks]);
         }
 
         setCurrentEntry({ id: "", description: "", time: "", date: "" });
         setIsEditing(false);
         setIsModalVisible(false);
     };
-
 
     const handleEditTask = (task: Task) => {
         setCurrentEntry(task);
@@ -143,6 +134,7 @@ const Home = () => {
 
     return (
         <View style={styles.container}>
+
             <Animated.Text style={[styles.screenTitle, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
                 Welcome to TaskMate 😍
             </Animated.Text>
